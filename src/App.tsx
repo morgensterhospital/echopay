@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import './honeycomb.css';
 import { useAuthStore } from './stores/authStore';
 
 // Pages
@@ -27,14 +28,18 @@ function App() {
 
   if (!initialized || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <div className="w-8 h-8 bg-white rounded-lg"></div>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">EchoPay</h1>
-          <p className="text-gray-600">Loading...</p>
+      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center text-white">
+        <div className="honeycomb">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
+        <h1 className="text-2xl font-bold mt-8">EchoPay</h1>
+        <p className="text-gray-400">Initializing...</p>
       </div>
     );
   }
