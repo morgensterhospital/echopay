@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup
-} from 'firebase/auth';
-import { doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { useAuthStore } from '../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Eye, EyeOff, ArrowLeft, Wallet } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import Button from '../components/Button';
 import { Link } from 'react-router-dom';
 
@@ -71,7 +66,7 @@ const Auth: React.FC = () => {
         await setDoc(doc(db, 'users', userCredential.user.uid), userProfile);
         await signIn(userCredential.user);
         toast.success('Account created successfully!');
-        navigate('/dashboard');
+        navigate('/onboarding');
       }
     } catch (error: any) {
       console.error('Auth error:', error);
@@ -95,9 +90,6 @@ const Auth: React.FC = () => {
         case 'auth/too-many-requests':
           errorMessage = 'Too many failed attempts. Please try again later';
           break;
-        default:
-          errorMessage = error.message;
-          break;
       }
       
       toast.error(errorMessage);
@@ -106,73 +98,32 @@ const Auth: React.FC = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setLoading(true);
-    try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      // Check if user profile exists
-      const profileRef = doc(db, 'users', user.uid);
-      const profileSnap = await getDoc(profileRef);
-
-      if (!profileSnap.exists()) {
-        // Create new profile for Google users
-        const userProfile = {
-          uid: user.uid,
-          email: user.email || '',
-          name: user.displayName || '',
-          phone: user.phoneNumber || '',
-          createdAt: Timestamp.now(),
-          language: 'en',
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        };
-        await setDoc(profileRef, userProfile);
-      }
-
-      await signIn(user);
-      toast.success('Signed in with Google successfully!');
-      navigate('/dashboard');
-    } catch (error: any) {
-      console.error("Google Sign-In Error", error);
-      toast.error(`Failed to sign in with Google: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
-      <div className="absolute top-0 left-0 p-4">
-        <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
-          <ArrowLeft className="h-5 w-5" />
-          Back to Home
-        </Link>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-block p-3 bg-gray-800 rounded-full mb-4">
-            <Wallet className="h-8 w-8 text-purple-400" />
-          </div>
-          <h1 className="text-3xl font-bold text-white">
-            {isLogin ? 'Welcome Back' : 'Create an Account'}
+          <Link to="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
+            <ArrowLeft className="h-5 w-5" />
+            Back to Home
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {isLogin ? 'Welcome Back' : 'Create Account'}
           </h1>
-          <p className="text-gray-400 mt-2">
+          <p className="text-gray-600 mt-2">
             {isLogin 
-              ? 'Sign in to continue to EchoPay'
-              : 'Get started with seamless voice payments'
+              ? 'Sign in to your EchoPay account'
+              : 'Join the future of voice payments'
             }
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-gray-700">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {!isLogin && (
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                   Full Name
                 </label>
                 <input
@@ -180,14 +131,14 @@ const Auth: React.FC = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Enter your full name"
                 />
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
               <input
@@ -196,13 +147,13 @@ const Auth: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                placeholder="you@example.com"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                placeholder="Enter your email"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-400 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -213,18 +164,18 @@ const Auth: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-4 py-3 pr-12 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                  placeholder="••••••••"
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-white"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
+                    <EyeOff className="h-5 w-5 text-gray-400" />
                   ) : (
-                    <Eye className="h-5 w-5" />
+                    <Eye className="h-5 w-5 text-gray-400" />
                   )}
                 </button>
               </div>
@@ -232,7 +183,7 @@ const Auth: React.FC = () => {
 
             {!isLogin && (
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-400 mb-2">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                   Confirm Password
                 </label>
                 <input
@@ -241,8 +192,8 @@ const Auth: React.FC = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                  placeholder="••••••••"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Confirm your password"
                 />
               </div>
             )}
@@ -251,45 +202,34 @@ const Auth: React.FC = () => {
               type="submit"
               size="lg"
               loading={loading}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white focus:ring-purple-500"
+              className="w-full"
             >
               {isLogin ? 'Sign In' : 'Create Account'}
             </Button>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-700" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-800 text-gray-400">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <Button
-                variant="outline"
-                className="w-full border-gray-600 hover:bg-gray-700"
-                onClick={handleGoogleSignIn}
-                disabled={loading}
-              >
-                <img src="/google.svg" alt="Google" className="h-5 w-5 mr-3" />
-                Sign in with Google
-              </Button>
-            </div>
-          </div>
-
           <div className="mt-6 text-center">
-            <p className="text-gray-400">
+            <p className="text-gray-600">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="font-medium text-purple-400 hover:text-purple-300"
+                className="font-medium text-blue-600 hover:text-blue-500"
               >
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </button>
             </p>
+          </div>
+        </div>
+
+        {/* Demo Account */}
+        <div className="mt-6 text-center">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p className="text-sm font-medium text-blue-900 mb-2">Demo Account</p>
+            <p className="text-xs text-blue-700 mb-3">Try EchoPay without creating an account</p>
+            <div className="space-y-1 text-xs text-blue-600">
+              <p>Email: demo@echopay.com</p>
+              <p>Password: demo123</p>
+            </div>
           </div>
         </div>
       </div>
