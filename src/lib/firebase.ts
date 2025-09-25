@@ -25,6 +25,16 @@ export const db = getFirestore(app);
 // Initialize Realtime Database
 export const rtdb = getDatabase(app);
 
-// Emulators are not used in this project
+// Connect to emulators in development
+if (import.meta.env.DEV) {
+  try {
+    connectAuthEmulator(auth, 'http://localhost:9099');
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectDatabaseEmulator(rtdb, 'localhost', 9000);
+  } catch (error) {
+    // Emulators already connected
+    console.log('Firebase emulators already connected');
+  }
+}
 
 export default app;

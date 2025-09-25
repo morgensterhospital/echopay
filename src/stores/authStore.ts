@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { User } from 'firebase/auth';
 import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
-import { toast } from 'react-hot-toast';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 
@@ -78,10 +77,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         loading: false, 
         initialized: true 
       });
-    } catch (error: any) {
-      console.error('Error signing in:', error.message);
-      set({ user: null, profile: null, loading: false, initialized: true });
-      toast.error(`Sign in failed: ${error.message}`);
+    } catch (error) {
+      console.error('Error signing in:', error);
+      set({ loading: false });
     }
   },
 

@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import './honeycomb.css';
 import { useAuthStore } from './stores/authStore';
 
 // Pages
 import Landing from './pages/Landing';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
-import Settings from './pages/Settings';
 
 // Add these placeholder components for now
 const Onboarding = () => <div className="p-8">Onboarding page - coming soon</div>;
 const Payments = () => <div className="p-8">Payments page - coming soon</div>;
 const Transactions = () => <div className="p-8">Transactions page - coming soon</div>;
 const Assistant = () => <div className="p-8">Assistant page - coming soon</div>;
+const Settings = () => <div className="p-8">Settings page - coming soon</div>;
 const Admin = () => <div className="p-8">Admin page - coming soon</div>;
 const Notifications = () => <div className="p-8">Notifications page - coming soon</div>;
 
@@ -28,18 +27,14 @@ function App() {
 
   if (!initialized || loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center text-white">
-        <div className="honeycomb">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <div className="w-8 h-8 bg-white rounded-lg"></div>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">EchoPay</h1>
+          <p className="text-gray-600">Loading...</p>
         </div>
-        <h1 className="text-2xl font-bold mt-8">EchoPay</h1>
-        <p className="text-gray-400">Initializing...</p>
       </div>
     );
   }
