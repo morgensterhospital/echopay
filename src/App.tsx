@@ -8,13 +8,13 @@ import { useAuthStore } from './stores/authStore';
 import Landing from './pages/Landing';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
 
 // Add these placeholder components for now
 const Onboarding = () => <div className="p-8">Onboarding page - coming soon</div>;
 const Payments = () => <div className="p-8">Payments page - coming soon</div>;
 const Transactions = () => <div className="p-8">Transactions page - coming soon</div>;
 const Assistant = () => <div className="p-8">Assistant page - coming soon</div>;
-const Settings = () => <div className="p-8">Settings page - coming soon</div>;
 const Admin = () => <div className="p-8">Admin page - coming soon</div>;
 const Notifications = () => <div className="p-8">Notifications page - coming soon</div>;
 
