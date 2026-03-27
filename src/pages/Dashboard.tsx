@@ -301,7 +301,7 @@ const Dashboard: React.FC = () => {
                 {notifications.slice(0, 3).map((notification, index) => (
                   <div key={index} className={`p-3 rounded-lg border ${
                     notification.read 
-                      ? 'border-gray-200 bg-gray-50' 
+                      ? 'border-gray-200 bg-gray-50'
                       : 'border-blue-200 bg-blue-50'
                   }`}>
                     <h4 className="font-medium text-gray-900 text-sm">{notification.title}</h4>

@@ -112,7 +112,7 @@ const Auth: React.FC = () => {
           </h1>
           <p className="text-gray-600 mt-2">
             {isLogin 
-              ? 'Sign in to your EchoPay account' 
+              ? 'Sign in to your EchoPay account'
               : 'Join the future of voice payments'
             }
           </p>
